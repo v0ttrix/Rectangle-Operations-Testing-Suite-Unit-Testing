@@ -6,3 +6,6 @@ int getArea(int *length, int *width);
 void printWelcomeMenu();
 void printOptions();
 int getIntInput(char message[]);
+
+
+
