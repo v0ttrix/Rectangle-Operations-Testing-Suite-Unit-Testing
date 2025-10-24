@@ -1,99 +1,151 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-extern "C"
-{
-	#include "..\BCSRec\main.h"
+extern "C" {
+    #include "../BCSRec/main.h"
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace BCSRecTesting
 {
-    TEST_CLASS(BCSRecTesting)
+    TEST_CLASS(PerimeterTests)
     {
     public:
-        // Test for getPerimeter function
-        TEST_METHOD(TestGetPerimeter)
+        TEST_METHOD(TestPerimeter_NormalCase)
         {
-            int length = 8;
-            int width = 12;
-            int expectedPerimeter = 40; // 2 * length + 2 * width
-            int actualPerimeter = getPerimeter(&length, &width);
-
-            // Assert if the actual perimeter matches the expected value
-            Assert::AreEqual(expectedPerimeter, actualPerimeter);
+            Assert::AreEqual(40, getPerimeter(8, 12));
         }
 
-        //Test for getArea function
-        TEST_METHOD(TestGetArea)
+        TEST_METHOD(TestPerimeter_MinValues)
         {
-            int length = 8;
-            int width = 12;
-            int expectedArea = 96; // length * width
-            int actualArea = getArea(&length, &width);
-
-            //Assert if the actual area matches the expected value
-            Assert::AreEqual(expectedArea, actualArea);
+            Assert::AreEqual(4, getPerimeter(1, 1));
         }
 
+        TEST_METHOD(TestPerimeter_MaxValues)
+        {
+            Assert::AreEqual(400, getPerimeter(100, 100));
+        }
 
+        TEST_METHOD(TestPerimeter_Rectangle)
+        {
+            Assert::AreEqual(30, getPerimeter(5, 10));
+        }
+    };
 
+    TEST_CLASS(AreaTests)
+    {
+    public:
+        TEST_METHOD(TestArea_NormalCase)
+        {
+            Assert::AreEqual(96, getArea(8, 12));
+        }
 
+        TEST_METHOD(TestArea_MinValues)
+        {
+            Assert::AreEqual(1, getArea(1, 1));
+        }
 
-        // Test 1: Valid input within range (usual case)
+        TEST_METHOD(TestArea_MaxValues)
+        {
+            Assert::AreEqual(10000, getArea(100, 100));
+        }
+
+        TEST_METHOD(TestArea_Rectangle)
+        {
+            Assert::AreEqual(50, getArea(5, 10));
+        }
+    };
+
+    TEST_CLASS(SetLengthTests)
+    {
+    public:
         TEST_METHOD(TestSetLength_ValidInput)
         {
             int length = 0;
             setLength(50, &length);
-            Assert::AreEqual(50, length); // Expected: length should be set to 50
+            Assert::AreEqual(50, length);
         }
 
-        // Test 2: Boundary case (maximum valid input)
+        TEST_METHOD(TestSetLength_MinBoundary)
+        {
+            int length = 0;
+            setLength(1, &length);
+            Assert::AreEqual(1, length);
+        }
+
         TEST_METHOD(TestSetLength_MaxBoundary)
         {
             int length = 0;
-            setLength(99, &length);
-            Assert::AreEqual(99, length); // Expected: length should be set to 99
+            setLength(100, &length);
+            Assert::AreEqual(100, length);
         }
 
-        // Test 3: Invalid input (negative number, unusual case)
-        TEST_METHOD(TestSetLength_InvalidInputNegative)
+        TEST_METHOD(TestSetLength_BelowMin)
+        {
+            int length = 10;
+            setLength(0, &length);
+            Assert::AreEqual(10, length);
+        }
+
+        TEST_METHOD(TestSetLength_AboveMax)
+        {
+            int length = 10;
+            setLength(101, &length);
+            Assert::AreEqual(10, length);
+        }
+
+        TEST_METHOD(TestSetLength_Negative)
         {
             int length = 10;
             setLength(-5, &length);
-            Assert::AreEqual(10, length); // Expected: length should remain unchanged
+            Assert::AreEqual(10, length);
         }
+    };
 
-
-
-
-
-
-        // Test 1: Valid input within range (usual case)
+    TEST_CLASS(SetWidthTests)
+    {
+    public:
         TEST_METHOD(TestSetWidth_ValidInput)
         {
             int width = 0;
             setWidth(20, &width);
-            Assert::AreEqual(20, width); // Expected: width should be set to 20
+            Assert::AreEqual(20, width);
         }
 
-        // Test 2: Boundary case (minimum valid input)
         TEST_METHOD(TestSetWidth_MinBoundary)
         {
             int width = 0;
             setWidth(1, &width);
-            Assert::AreEqual(1, width); // Expected: width should be set to 1
+            Assert::AreEqual(1, width);
         }
 
-        // Test 3: Invalid input (above maximum limit, unusual case)
-        TEST_METHOD(TestSetWidth_InvalidInputAboveMax)
+        TEST_METHOD(TestSetWidth_MaxBoundary)
+        {
+            int width = 0;
+            setWidth(100, &width);
+            Assert::AreEqual(100, width);
+        }
+
+        TEST_METHOD(TestSetWidth_BelowMin)
+        {
+            int width = 30;
+            setWidth(0, &width);
+            Assert::AreEqual(30, width);
+        }
+
+        TEST_METHOD(TestSetWidth_AboveMax)
         {
             int width = 30;
             setWidth(150, &width);
-            Assert::AreEqual(30, width); // Expected: width should remain unchanged
+            Assert::AreEqual(30, width);
         }
 
+        TEST_METHOD(TestSetWidth_Negative)
+        {
+            int width = 30;
+            setWidth(-10, &width);
+            Assert::AreEqual(30, width);
+        }
     };
-
 }

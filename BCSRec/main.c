@@ -1,113 +1,107 @@
 #include <stdio.h>
 #include <stdbool.h>
-
 #include "main.h"
 
-void main() {
-	int length = 1;
-	int width = 1;
-	bool continueProgram = true;
-	while (continueProgram) {
-		printWelcomeMenu();
-
-		printOptions();
-
-		int menuInput;
-		menuInput = getIntInput("Enter menu option number:");
-
-		switch (menuInput)
-		{
-			case 1:
-			{
-				printf("\nThe Rectangle has a length of %i and a width of %i\n\n", length, width);
-				break;
-			}
-			case 2:
-			{
-				int input = getIntInput("Please enter the length of the rectangle:");
-				setLength(input, &length);
-				break;
-			}
-			case 3:
-			{
-				int input = getIntInput("Please enter the width of the rectangle:");
-				setWidth(input, &width);
-				break;
-			}
-			case 4:
-			{
-				printf("\nThe Rectangle has a perimeter of %i\n\n", getPerimeter(&length, &width));
-				break;
-			}
-			case 5:
-			{
-				printf("\nThe Rectangle has an area of %i\n\n", getArea(&length, &width));
-				break;
-			}
-			case 6:
-			{
-				continueProgram = false;
-				break;
-			}
-			default:
-			{
-				printf("\nInvalid value entered.\n\n");
-				break;
-			}
-		}
-	}
+int main(void) {
+    int length = MIN_DIMENSION;
+    int width = MIN_DIMENSION;
+    bool continueProgram = true;
+    
+    while (continueProgram) {
+        printWelcomeMenu();
+        printOptions();
+        
+        int menuInput = getIntInput("Enter menu option number:");
+        
+        switch (menuInput) {
+            case 1:
+                printf("\nRectangle: length=%d, width=%d\n\n", length, width);
+                break;
+            case 2: {
+                int input = getIntInput("Enter rectangle length:");
+                setLength(input, &length);
+                break;
+            }
+            case 3: {
+                int input = getIntInput("Enter rectangle width:");
+                setWidth(input, &width);
+                break;
+            }
+            case 4:
+                printf("\nPerimeter: %d\n\n", getPerimeter(length, width));
+                break;
+            case 5:
+                printf("\nArea: %d\n\n", getArea(length, width));
+                break;
+            case 6:
+                continueProgram = false;
+                break;
+            default:
+                printf("\nInvalid option. Please try again.\n\n");
+                break;
+        }
+    }
+    return 0;
 }
 
-int getIntInput(char message[]) {
-	int input;
-	int scannedValues;
-	do {
-		printf("\n%s\n",message);
-		scannedValues = scanf_s("%i", &input);
-		int buf;
-		while ((buf = getchar()) != '\n' && buf != EOF);
-	} while (scannedValues != 1);
-	return input;
+int getIntInput(const char* message) {
+    int input;
+    int result;
+    
+    do {
+        printf("\n%s\n", message);
+        result = scanf("%d", &input);
+        
+        // Clear input buffer
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+        
+        if (result != 1) {
+            printf("Invalid input. Please enter a number.\n");
+        }
+    } while (result != 1);
+    
+    return input;
 }
 
-void setLength(int input, int *length) {
-	if (input >= 0 && input < 100) {
-		*length = input;
-	}
+void setLength(int input, int* length) {
+    if (input >= MIN_DIMENSION && input <= MAX_DIMENSION) {
+        *length = input;
+        printf("Length set to %d\n", input);
+    } else {
+        printf("Invalid length. Must be between %d and %d\n", MIN_DIMENSION, MAX_DIMENSION);
+    }
 }
 
-void setWidth(int input, int *width) {
-	if (input > 0 && input <= 100) {
-		*width = input;
-	}
+void setWidth(int input, int* width) {
+    if (input >= MIN_DIMENSION && input <= MAX_DIMENSION) {
+        *width = input;
+        printf("Width set to %d\n", input);
+    } else {
+        printf("Invalid width. Must be between %d and %d\n", MIN_DIMENSION, MAX_DIMENSION);
+    }
 }
 
-int getPerimeter(int *length, int *width) {
-	int perimeter = 2 * (*length + *width);
-	return perimeter;
+int getPerimeter(int length, int width) {
+    return 2 * (length + width);
 }
 
-int getArea(int *length, int *width) {
-	int area = *length * *width;
-	return area;
+int getArea(int length, int width) {
+    return length * width;
 }
 
-void printWelcomeMenu() {
-	printf(" **********************\n");
-	printf("**     Welcome to     **\n");
-	printf("**    Assignment 02   **\n");
-	printf(" **********************\n");
+void printWelcomeMenu(void) {
+    printf(" **********************\n");
+    printf("**     Welcome to     **\n");
+    printf("**  Rectangle Calc    **\n");
+    printf(" **********************\n");
 }
 
-void printOptions() {
-	printf("1. Get Rectange Length & Width\n");
-	printf("2. Change Rectangle Length\n");
-	printf("3. Change Rectangle Width\n");
-	printf("4. Get Rectangle Perimeter\n");
-	printf("5. Get Rectangle Area\n");
-	printf("6. Exit\n");
+void printOptions(void) {
+    printf("1. Show Rectangle Dimensions\n");
+    printf("2. Set Rectangle Length\n");
+    printf("3. Set Rectangle Width\n");
+    printf("4. Calculate Perimeter\n");
+    printf("5. Calculate Area\n");
+    printf("6. Exit\n");
 }
-
-
-
-// jjjj
